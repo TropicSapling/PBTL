@@ -5,3 +5,11 @@ wait 3 secs
 print Hello World!; as nlist
 wait 5 seconds
 print Hello World!; as bubbletopsnow
+wait 1 sec
+print Hello World!; as TropicSapling
+wait 1 sec
+print Hello World!; as an-OK-squirrel
+wait 1 sec
+print Hello World!; as Zaidhaan
+wait 1 sec
+print Hello World!; as ev3commander

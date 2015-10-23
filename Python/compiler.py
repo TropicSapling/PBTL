@@ -8,7 +8,7 @@ def getFileLen(dir):
 		return o
 
 path = input("Specify the location of the file you want to compile: ")
-print("Compiling...")
+print("Preparing...")
 if(len(path) < 1):
 	print("ERROR #0: Invalid file location. Seriosly, you can't just write nothing -.-")
 elif(not(path.endswith(".pbtl"))):
@@ -26,6 +26,24 @@ else:
 	dest = open(path[:-4] + "py", "w")
 	foundPrint = False
 	foundWait = False
+	
+	# Write imports
+	print("Importing...")
+	for line in fileLi:
+		for char in line:
+			lineLi.append(char)
+			if((("".join(lineLi)).endswith("wait ")) and (not foundWait)):
+				dest.write("import time\n")
+				foundWait = True
+		lineLi = []
+		lineNo += 1
+		print("%.2f%s" % (round((lineNo / fileLength)*100, 2), "%"))
+	lineNo = 0
+	lineLi = []
+	foundWait = False
+	print("Importing done.")
+	print("Compiling...")
+	# Write main stuff
 	for line in fileLi:
 		for char in line:
 			lineLi.append(char)
@@ -82,12 +100,13 @@ else:
 					else:
 						print("[ERROR] {} is not a digit, ignoring.".format(char))
 					if(charNo+1 == len(line)):
-						dest.write("# Coming soon!")
+						dest.write("time.sleep({})".format("".join(tmpLi)))
 						tmpLi = []
 						foundWait = False
 			charNo += 1
 		if(lineNo+1 != fileLength):
 			dest.write("\n")
+		lineLi = []
 		charNo = 0
 		lineNo += 1
 		print("%.2f%s" % (round((lineNo / fileLength)*100, 2), "%"))
