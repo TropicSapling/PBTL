@@ -49,6 +49,26 @@ else:
 						dest.write("print(\"\\n\".join({}))".format(tmpLi))
 						tmpLi = []
 						foundPrint = False
+					elif(("".join(lineLi)).endswith("; as TropicSapling")):
+						tmpLi = tmpLi[:-18]
+						dest.write("print(\"WUT how did you know my username O_O\")\nprint(\"{}\")".format("".join(tmpLi)))
+						tmpLi = []
+						foundPrint = False
+					elif(("".join(lineLi)).endswith("; as an-OK-squirrel")):
+						tmpLi = tmpLi[:-19]
+						dest.write("print(\"So, what is this?\")\nprint(\"{}\")".format("".join(tmpLi)))
+						tmpLi = []
+						foundPrint = False
+					elif(("".join(lineLi)).endswith("; as Zaidhaan")):
+						tmpLi = tmpLi[:-13]
+						dest.write("print(\"O hello!\")\nprint(\"{}\")".format("".join(tmpLi)))
+						tmpLi = []
+						foundPrint = False
+					elif(("".join(lineLi)).endswith("; as ev3commander")):
+						tmpLi = tmpLi[:-17]
+						dest.write("print(\"Markdown is pretty cool\")\nprint(\"{}\")".format("".join(tmpLi)))
+						tmpLi = []
+						foundPrint = False
 					elif(charNo+1 == len(line)):
 						dest.write("print(\"{}\")".format("".join(tmpLi)))
 						tmpLi = []
@@ -71,63 +91,4 @@ else:
 		charNo = 0
 		lineNo += 1
 		print("%.2f%s" % (round((lineNo / fileLength)*100, 2), "%"))
-	"""destination = open(path[:-4] + "py", "w")
-	source = open(path, "r")
-	fileLength = getFileLen(source)
-	source.close()
-	source = open(path, "r") # Yes this is necessary because of the garbage collector...
-	lineNumber = 0
-	charNumber = 0
-	foundPrint = False
-	foundWait = False
-	lineLi = []
-	tmpLi = []
-	liValue = 0
-	for line in source:
-		for char in line:
-			lineLi.append(char)
-			if(("".join(lineLi)).endswith("print ") or foundPrint):
-				if(not foundPrint):
-					liValue += 1
-					foundPrint = True
-				else:
-					tmpLi.append(char)
-					if(("".join(lineLi)).endswith("; as list")):
-						tmpLi = tmpLi[:-9]
-						destination.write("print(\", \".join({}))".format(tmpLi))
-						tmpLi = []
-						foundPrint = False
-					elif(("".join(lineLi)).endswith("; as nlist")):
-						tmpLi = tmpLi[:-11]
-						destination.write("print(\"\\n\".join({}))".format(tmpLi))
-						tmpLi = []
-						foundPrint = False
-					elif(charNumber+1 == len(line)):
-						tmpLi = tmpLi[:-1]
-						destination.write("print(\"{}\")".format("".join(tmpLi)))
-						tmpLi = []
-						foundPrint = False
-			elif(("".join(lineLi)).endswith("wait ") or foundWait):
-				if(not foundWait):
-					liValue += 1
-					foundWait = True
-				else:
-					tmpLi.append(char)
-					if((("".join(lineLi)).endswith(" secs")) or (("".join(lineLi)).endswith(" seconds"))):
-						if(("".join(lineLi)).endswith(" secs")):
-							tmpLi = tmpLi[:-5]
-						else:
-							tmpLi = tmpLi[:-8]
-						destination.write("time.sleep({})".format("".join(tmpLi)))
-						tmpLi = []
-						foundWait = False
-			charNumber += 1
-		if(lineNumber+1 != fileLength):
-			destination.write("\n")
-		charNumber = 0
-		lineLi = []
-		lineNumber += 1
-		print("%.2f%s" % (round((lineNumber / fileLength)*100, 2), "%"))
-	source.close()
-	destination.close()"""
 	print("Compilation done.")
