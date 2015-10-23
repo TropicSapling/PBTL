@@ -1,5 +1,8 @@
 print("Hello World!")
-time.sleep(3)
-print(", ".join(['H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!', ' ', 'a', 's', ' ', 'l', 'i', 's', 't']))
-time.sleep(5)
-print("\n".join(['H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!', ' ', 'a', 's', ' ', 'w', 'h', 'i', 't', 'e', 's', 'p', 'a', 'c', 'e', 'd', ' ', 'l', 'i', 's']))
+# Coming soon!
+print(", ".join(['H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!']))
+# Coming soon!
+print("\n".join(['H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!']))
+# Coming soon!
+print("PRINT WHATEVERTHEFUDGINGTHINGYOUWANT")
+print("Hello World!")

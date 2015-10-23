@@ -1,5 +1,7 @@
 print Hello World!
+wait 2
+print Hello World!; as list
 wait 3 secs
-print Hello World! as list; as list
-wait 5 secs
-print Hello World! as whitespaced list; as nlist
+print Hello World!; as nlist
+wait 5 seconds
+print Hello World!; as bubbletopsnow

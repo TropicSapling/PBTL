@@ -1,4 +1,4 @@
-import time
+import math
 
 def getFileLen(dir):
 	o = sum(1 for _ in dir)
@@ -14,7 +14,64 @@ if(len(path) < 1):
 elif(not(path.endswith(".pbtl"))):
 	print("ERROR #1: Invalid file extension. Must be '.pbtl'.")
 else:
-	destination = open(path[:-4] + "py", "w")
+	with open(path) as f:
+		fileLi = f.read()
+		fileLi = fileLi.splitlines()
+	print("[DEBUG] {}".format(fileLi))
+	lineNo = 0
+	charNo = 0
+	lineLi = []
+	tmpLi = []
+	fileLength = getFileLen(open(path, "r"))
+	dest = open(path[:-4] + "py", "w")
+	foundPrint = False
+	foundWait = False
+	for line in fileLi:
+		for char in line:
+			lineLi.append(char)
+			if(("".join(lineLi)).endswith("print ") or foundPrint):
+				if(not foundPrint):
+					foundPrint = True
+				else:
+					tmpLi.append(char)
+					if(("".join(lineLi)).endswith("; as bubbletopsnow")):
+						tmpLi = tmpLi[:-18]
+						dest.write("print(\"PRINT WHATEVERTHEFUDGINGTHINGYOUWANT\")\nprint(\"{}\")".format("".join(tmpLi)))
+						tmpLi = []
+						foundPrint = False
+					elif(("".join(lineLi)).endswith("; as list")):
+						tmpLi = tmpLi[:-9]
+						dest.write("print(\", \".join({}))".format(tmpLi))
+						tmpLi = []
+						foundPrint = False
+					elif(("".join(lineLi)).endswith("; as nlist")):
+						tmpLi = tmpLi[:-10]
+						dest.write("print(\"\\n\".join({}))".format(tmpLi))
+						tmpLi = []
+						foundPrint = False
+					elif(charNo+1 == len(line)):
+						dest.write("print(\"{}\")".format("".join(tmpLi)))
+						tmpLi = []
+						foundPrint = False
+			elif(("".join(lineLi)).endswith("wait ") or foundWait):
+				if(not foundWait):
+					foundWait = True
+				else:
+					if(char.isdigit()):
+						tmpLi.append(char)
+					else:
+						print("[ERROR] {} is not a digit, ignoring.".format(char))
+					if(charNo+1 == len(line)):
+						dest.write("# Coming soon!")
+						tmpLi = []
+						foundWait = False
+			charNo += 1
+		if(lineNo+1 != fileLength):
+			dest.write("\n")
+		charNo = 0
+		lineNo += 1
+		print("%.2f%s" % (round((lineNo / fileLength)*100, 2), "%"))
+	"""destination = open(path[:-4] + "py", "w")
 	source = open(path, "r")
 	fileLength = getFileLen(source)
 	source.close()
@@ -72,5 +129,5 @@ else:
 		lineNumber += 1
 		print("%.2f%s" % (round((lineNumber / fileLength)*100, 2), "%"))
 	source.close()
-	destination.close()
+	destination.close()"""
 	print("Compilation done.")
