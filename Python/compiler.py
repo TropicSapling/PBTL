@@ -17,7 +17,7 @@ else:
 	with open(path) as f:
 		fileLi = f.read()
 		fileLi = fileLi.splitlines()
-	print("[DEBUG] {}".format(fileLi))
+	print("[DEBUG]: {}".format(fileLi))
 	lineNo = 0
 	charNo = 0
 	lineLi = []
@@ -26,6 +26,7 @@ else:
 	dest = open(path[:-4] + "py", "w")
 	foundPrint = False
 	foundWait = False
+	foundComment = False
 	
 	# Write imports
 	print("Importing...")
@@ -34,6 +35,7 @@ else:
 			lineLi.append(char)
 			if((("".join(lineLi)).endswith("wait ")) and (not foundWait)):
 				dest.write("import time\n")
+				print("[DEBUG]: Found need of import.")
 				foundWait = True
 		lineLi = []
 		lineNo += 1
@@ -47,8 +49,12 @@ else:
 	for line in fileLi:
 		for char in line:
 			lineLi.append(char)
-			if(("".join(lineLi)).endswith("print ") or foundPrint):
+			if(foundComment):
+				if(("".join(lineLi)).endswith("\"")):
+					foundComment = False
+			elif(("".join(lineLi)).endswith("print ") or foundPrint):
 				if(not foundPrint):
+					print("[DEBUG]: Found print.")
 					foundPrint = True
 				else:
 					tmpLi.append(char)
@@ -93,6 +99,7 @@ else:
 						foundPrint = False
 			elif(("".join(lineLi)).endswith("wait ") or foundWait):
 				if(not foundWait):
+					print("[DEBUG]: Found wait.")
 					foundWait = True
 				else:
 					if(char.isdigit()):
@@ -103,8 +110,15 @@ else:
 						dest.write("time.sleep({})".format("".join(tmpLi)))
 						tmpLi = []
 						foundWait = False
+			elif(("".join(lineLi)).endswith("´´")):
+				print("[DEBUG]: Found one-line comment.")
+				break
+			elif(("".join(lineLi)).endswith("\"")):
+				foundComment = True
+				print("[DEBUG]: Found multi-line comment.")
+				break
 			charNo += 1
-		if(lineNo+1 != fileLength):
+		if((lineNo+1 != fileLength) and (foundComment == False)):
 			dest.write("\n")
 		lineLi = []
 		charNo = 0

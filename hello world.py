@@ -1,21 +1,12 @@
 import time
-print("Hello World!")
+print("Hello world!")
 time.sleep(2)
-print(", ".join(['H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!']))
-time.sleep(3)
-print("\n".join(['H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!']))
-time.sleep(5)
-print("PRINT WHATEVERTHEFUDGINGTHINGYOUWANT")
-print("Hello World!")
+
+
+
+
+print("#Hello world!")
 time.sleep(1)
-print("WUT how did you know my username O_O")
-print("Hello World!")
-time.sleep(1)
-print("So, what is this?")
-print("Hello World!")
-time.sleep(1)
-print("O hello!")
-print("Hello World!")
-time.sleep(1)
-print("Markdown is pretty cool")
-print("Hello World!")
+print("Hello #world!")
+time.sleep(2)
+print("#Hello #world!")
