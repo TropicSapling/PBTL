@@ -1,10 +1,12 @@
 print Hello world!
 wait 2 secs
-´´One line comment
+
+// One line comment
 "
 Multi-Line
 Comment
 "
+
 #Hello = Goodbye
 #world = universe
 print #Hello world!

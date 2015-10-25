@@ -52,6 +52,9 @@ else:
 			if(foundComment):
 				if(("".join(lineLi)).endswith("\"")):
 					foundComment = False
+					break
+				else:
+					break
 			elif(("".join(lineLi)).endswith("print ") or foundPrint):
 				if(not foundPrint):
 					print("[DEBUG]: Found print.")
@@ -110,7 +113,7 @@ else:
 						dest.write("time.sleep({})".format("".join(tmpLi)))
 						tmpLi = []
 						foundWait = False
-			elif(("".join(lineLi)).endswith("´´")):
+			elif(("".join(lineLi)).endswith("//")):
 				print("[DEBUG]: Found one-line comment.")
 				break
 			elif(("".join(lineLi)).endswith("\"")):
@@ -118,7 +121,7 @@ else:
 				print("[DEBUG]: Found multi-line comment.")
 				break
 			charNo += 1
-		if((lineNo+1 != fileLength) and (foundComment == False)):
+		if((lineNo+1 != fileLength) and (charNo == len(line)) and (not foundComment) and (len(line) != 0)):
 			dest.write("\n")
 		lineLi = []
 		charNo = 0
