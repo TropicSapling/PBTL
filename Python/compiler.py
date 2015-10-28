@@ -1,4 +1,5 @@
 import math
+import time
 
 def getFileLen(dir):
 	o = sum(1 for _ in dir)
@@ -8,6 +9,7 @@ def getFileLen(dir):
 		return o
 
 path = input("Specify the location of the file you want to compile: ")
+useDebug = input("Print debug messages? (Yes / No)\n").upper()
 print("Preparing...")
 if(len(path) < 1):
 	print("ERROR #0: Invalid file location. Seriosly, you can't just write nothing -.-")
@@ -17,7 +19,8 @@ else:
 	with open(path) as f:
 		fileLi = f.read()
 		fileLi = fileLi.splitlines()
-	print("[DEBUG]: {}".format(fileLi))
+	if(useDebug == "YES"):
+		print("[DEBUG]: {}".format(fileLi))
 	lineNo = 0
 	charNo = 0
 	lineLi = []
@@ -27,6 +30,7 @@ else:
 	foundPrint = False
 	foundWait = False
 	foundComment = False
+	errorType2 = 0
 	
 	# Write imports
 	print("Importing...")
@@ -35,11 +39,12 @@ else:
 			lineLi.append(char)
 			if((("".join(lineLi)).endswith("wait ")) and (not foundWait)):
 				dest.write("import time\n")
-				print("[DEBUG]: Found need of import.")
+				if(useDebug == "YES"):
+					print("[DEBUG]: Found need of import.")
 				foundWait = True
 		lineLi = []
 		lineNo += 1
-		print("%.2f%s" % (round((lineNo / fileLength)*100, 2), "%"))
+		print("%.2f%s" % (round((lineNo / fileLength)*100, 2), "%"), end = "\r")
 	lineNo = 0
 	lineLi = []
 	foundWait = False
@@ -57,7 +62,8 @@ else:
 					break
 			elif(("".join(lineLi)).endswith("print ") or foundPrint):
 				if(not foundPrint):
-					print("[DEBUG]: Found print.")
+					if(useDebug == "YES"):
+						print("[DEBUG]: Found print.")
 					foundPrint = True
 				else:
 					tmpLi.append(char)
@@ -102,23 +108,28 @@ else:
 						foundPrint = False
 			elif(("".join(lineLi)).endswith("wait ") or foundWait):
 				if(not foundWait):
-					print("[DEBUG]: Found wait.")
+					if(useDebug == "YES"):
+						print("[DEBUG]: Found wait.")
 					foundWait = True
 				else:
 					if(char.isdigit()):
 						tmpLi.append(char)
 					else:
 						print("[ERROR] {} is not a digit, ignoring.".format(char))
+						errorType2 += 1
+						foundError = True
 					if(charNo+1 == len(line)):
 						dest.write("time.sleep({})".format("".join(tmpLi)))
 						tmpLi = []
 						foundWait = False
 			elif(("".join(lineLi)).endswith("//")):
-				print("[DEBUG]: Found one-line comment.")
+				if(useDebug == "YES"):
+					print("[DEBUG]: Found one-line comment.")
 				break
 			elif(("".join(lineLi)).endswith("\"")):
 				foundComment = True
-				print("[DEBUG]: Found multi-line comment.")
+				if(useDebug == "YES"):
+					print("[DEBUG]: Found multi-line comment.")
 				break
 			charNo += 1
 		if((lineNo+1 != fileLength) and (charNo == len(line)) and (not foundComment) and (len(line) != 0)):
@@ -126,5 +137,17 @@ else:
 		lineLi = []
 		charNo = 0
 		lineNo += 1
-		print("%.2f%s" % (round((lineNo / fileLength)*100, 2), "%"))
-	print("Compilation done.")
+		print("%.2f%s" % (round((lineNo / fileLength)*100, 2), "%"), end = "\r")
+	print("\n")
+	print("------------------------------------------------------------")
+	if(foundError):
+		if(errorType2 > 0):
+			print("[!] Found {} errors of type 2 ('NaN').".format(errorType2))
+		else:
+			print("[?] Something is wrong with the error system.")
+			time.sleep(3)
+			print("Please make sure you haven't removed/edited any necessary files.")
+		time.sleep(3)
+		print("------------------------------------------------------------")
+	print("\nCompilation done.")
+		
