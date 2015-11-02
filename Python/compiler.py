@@ -30,10 +30,10 @@ else:
 	foundPrint = False
 	foundWait = False
 	foundComment = False
+	foundIgnore = False
 	errorType2 = 0
 	
-	# Write imports
-	print("Importing...")
+	# Prepare
 	for line in fileLi:
 		for char in line:
 			lineLi.append(char)
@@ -48,8 +48,9 @@ else:
 	lineNo = 0
 	lineLi = []
 	foundWait = False
-	print("Importing done.")
+	print("Preparations done.")
 	print("Compiling...")
+	
 	# Write main stuff
 	for line in fileLi:
 		for char in line:
@@ -57,9 +58,21 @@ else:
 			if(foundComment):
 				if(("".join(lineLi)).endswith("\"")):
 					foundComment = False
+					print("[DEBUG]: Found end of comment.")
 					break
 				else:
 					break
+			elif(foundIgnore):
+				foundIgnore = False
+				tmpLi.append(char)
+				print("[DEBUG]: Found end of ignore.")
+				charNo += 1
+				continue
+			elif(("".join(lineLi)).endswith("\\")):
+				foundIgnore = True
+				print("[DEBUG]: Found ignore.")
+				charNo += 1
+				continue
 			elif(("".join(lineLi)).endswith("print ") or foundPrint):
 				if(not foundPrint):
 					if(useDebug == "YES"):
@@ -131,8 +144,11 @@ else:
 				if(useDebug == "YES"):
 					print("[DEBUG]: Found multi-line comment.")
 				break
+			if(foundIgnore):
+				foundIgnore = False
 			charNo += 1
 		if((lineNo+1 != fileLength) and (charNo == len(line)) and (not foundComment) and (len(line) != 0)):
+			dest.write("".join(tmpLi))
 			dest.write("\n")
 		lineLi = []
 		charNo = 0
