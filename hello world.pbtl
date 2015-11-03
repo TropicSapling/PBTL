@@ -30,4 +30,4 @@ print \#Hello \#world!
 wait 3 secs
 
 print Please enter your IP and port like this: IP:port, ex: 128.478.1.4:28463; as #input
-print [Console] Hello!; as signal to #input
+print [Console] Hello!; as signal to #input:port

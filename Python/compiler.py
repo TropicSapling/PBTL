@@ -28,9 +28,12 @@ else:
 	fileLength = getFileLen(open(path, "r"))
 	dest = open(path[:-4] + "py", "w")
 	foundPrint = False
-	foundWait = False
+	foundPrint2 = False
+	foundPrint3 = False
 	foundComment = False
 	foundIgnore = False
+	foundError = False
+	foundWait = False
 	errorType2 = 0
 	
 	# Prepare
@@ -40,14 +43,22 @@ else:
 			if((("".join(lineLi)).endswith("wait ")) and (not foundWait)):
 				dest.write("import time\n")
 				if(useDebug == "YES"):
-					print("[DEBUG]: Found need of import.")
+					print("[DEBUG]: Imported 'time'.")
 				foundWait = True
+			elif(("".join(lineLi)).endswith("; as signal ") and (not foundPrint2)):
+				dest.write("import socket\n")
+				if(useDebug == "YES"):
+					print("[DEBUG]: Imported 'socket'.")
+				foundPrint2 = True
 		lineLi = []
 		lineNo += 1
 		print("%.2f%s" % (round((lineNo / fileLength)*100, 2), "%"), end = "\r")
 	lineNo = 0
 	lineLi = []
+	if(foundWait or foundPrint2):
+		dest.write("\n")
 	foundWait = False
+	foundPrint2 = False
 	print("Preparations done.")
 	print("Compiling...")
 	
@@ -115,6 +126,68 @@ else:
 						dest.write("print(\"Markdown is pretty cool\")\nprint(\"{}\")".format("".join(tmpLi)))
 						tmpLi = []
 						foundPrint = False
+					elif((("".join(lineLi)).endswith("; as signal to ")) or foundPrint2):
+						if(foundPrint2):
+							if(char == ":"):
+								start2 = end1+1
+								end2 = start2
+								end1 -= 1
+								if(useDebug == "YES"):
+									print("[DEBUG]: Found port.")
+							elif(charNo+1 == len(line)):
+								dest.write("s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n")
+								dest.write("s.connect(('{}', {}))\n".format("".join(tmpLi[start1:end1+1]), "".join(tmpLi[start2:end2+1])))
+								dest.write("s.send(\"{}\")\n".format("".join(tmpLi[:start1])))
+								dest.write("data = s.recv(1024)\n")
+								dest.write("s.close\n")
+								dest.write("print(\"[{}] \", data)".format("".join(tmpLi[start1:end1+1])))
+								tmpLi = []
+								foundPrint2 = False
+								foundPrint = False
+							if(start2 == -1):
+								end1 += 1
+							else:
+								end2 += 1
+						else:
+							tmpLi = tmpLi[:-15]
+							start1 = charNo-20
+							end1 = start1
+							start2 = -1
+							foundPrint2 = True
+							if(useDebug == "YES"):
+									print("[DEBUG]: Found IP.")
+					elif((("".join(lineLi)).endswith("; as signal from ")) or foundPrint3):
+						if(foundPrint3):
+							if(char == ":"):
+								start2 = end1+1
+								end2 = start2
+								if(useDebug == "YES"):
+									print("[DEBUG]: Found port.")
+							elif(charNo+1 == len(line)):
+								dest.write("s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n")
+								dest.write("s.bind(('{}', {}))\n".format("".join(tmpLi[start1:end1]), "".join(tmpLi[start2:end2])))
+								dest.write("s.listen(1)\n")
+								dest.write("conn, addr = s.accept()\n")
+								dest.write("while 1:\n")
+								dest.write("	if not conn.recv(BUFFER_SIZE): break\n")
+								dest.write("	print(\"[{}] \", data)".format("".join(tmpLi[start1:end1])))
+								dest.write("\n	conn.send(data)\n")
+								dest.write("conn.close()")
+								tmpLi = []
+								foundPrint3 = False
+								foundPrint = False
+							if(start2 == -1):
+								end1 += 1
+							else:
+								end2 += 1
+						else:
+							tmpLi = tmpLi[:-17]
+							start1 = charNo+1
+							end1 = start1
+							start2 = -1
+							foundPrint3 = True
+							if(useDebug == "YES"):
+									print("[DEBUG]: Found IP.")
 					elif(charNo+1 == len(line)):
 						dest.write("print(\"{}\")".format("".join(tmpLi)))
 						tmpLi = []
