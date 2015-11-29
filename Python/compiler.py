@@ -14,7 +14,7 @@ print("Preparing...")
 if(len(path) < 1):
 	print("ERROR #0: Invalid file location. Seriosly, you can't just write nothing -.-")
 elif(not(path.endswith(".pbtl"))):
-	print("ERROR #1: Invalid file extension. Must be '.pbtl'.")
+	print("ERROR #1: Invalid file extension. Must be '.pbtl' or '.pseudo'.")
 else:
 	with open(path) as f:
 		fileLi = f.read()
