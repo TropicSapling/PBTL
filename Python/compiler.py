@@ -1,4 +1,4 @@
-import math
+import math # For calculating the progress percentage
 import time
 
 def getFileLen(dir):
