@@ -13,7 +13,7 @@ useDebug = input("Print debug messages? (Yes / No)\n").upper()
 print("Preparing...")
 if(len(path) < 1):
 	print("ERROR #0: Invalid file location. Seriosly, you can't just write nothing -.-")
-elif(not(path.endswith(".pbtl"))):
+elif(not(path.endswith(".pbtl"))&&(not(path.endswith(".pseudo"))):
 	print("ERROR #1: Invalid file extension. Must be '.pbtl' or '.pseudo'.")
 else:
 	with open(path) as f:
